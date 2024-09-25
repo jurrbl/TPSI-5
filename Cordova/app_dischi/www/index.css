@@ -1,0 +1,16 @@
+
+
+#table{
+    display: grid;
+    width: fit-content;   
+    grid-template-columns: 100px 200px 200px 100px 90px 90px 90px;
+    grid-column-gap: 10px;
+	margin: 10px auto;
+	padding:15px;
+    border: 1px solid black;
+}
+
+
+button{
+	margin:3px;
+}

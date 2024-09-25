@@ -1,0 +1,21 @@
+{
+  "name": "e02-readfile",
+  "version": "1.0.0",
+  "description": "Semplice esempio di web server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "web",
+    "node",
+    "server"
+  ],
+  "author": "Samuele Bernardi",
+  "license": "ISC",
+  "dependencies": {
+    "mime": "^4.0.4"
+  }
+}

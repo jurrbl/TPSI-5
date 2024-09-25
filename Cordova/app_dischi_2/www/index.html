@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html> 
+<html>
+	<head lang="it">
+		<meta charset="UTF-8">
+		<!-- Meta tag CORDOVA -->
+		<meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <meta name="color-scheme" content="light dark">
+		<title>Dischi</title>
+		<!-- BOOTSTRAP e JQUERY -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+		<!-- SPECIFICI -->
+		<link rel="stylesheet" href="index.css">
+		<script src="axios@1.1.2.min.js"></script>		
+		<script src="libreria.js"></script>
+		<script src="index.js"></script>
+	</head>
+	
+	<body>
+		
+			<h1 class='text-center' style="margin:20px">Vendita dischi</h1>
+			<div id="table" class='table-info text-center'>
+				<div><b>Codice</b></div>
+				<div><b>Autore</b></div>
+				<div><b>Titolo</b></div>
+				<div><b>Anno</b></div>
+				<div> </div>
+				<div> </div>
+				<div> </div>
+			</div>
+			 
+			<br>
+			<center>
+				<button type='button'
+						class='btn btn-primary'
+						onclick='window.location.href="inserisci.html"'>
+						Aggiungi Nuovo Disco
+				</button>
+			</center>
+		</div>
+	</body>
+</html>
