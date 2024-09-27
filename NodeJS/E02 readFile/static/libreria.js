@@ -38,7 +38,7 @@ async function inviaRichiesta(method, url="", params={}) {
 			//return false or undefined
 		} 
 		else{
-		    let data = await response.json().catch(function(err){
+		    let data = await response.json().catch(function(err){ //entra nella catcj quando non riesce a convertire il json formato NOK
 				console.log(err)
 			    alert("response contains an invalid json")
 				//return false or undefined
