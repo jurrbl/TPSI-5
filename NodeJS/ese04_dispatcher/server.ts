@@ -1,37 +1,36 @@
-const { prototype } = require('events');
-const http = require('http');
-const { hostname } = require('os');
-const { send } = require('process');
-const url = require('url')
+import fs from 'fs';
+let paginaVuota: string;
 
-const PORT = 1337
+class Dispatcher {
+    prompt: string = ">>>";
+    listeners: Object =
+        {
+            GET: {},
+            POST: {},
+            PUT: {},
+            PATCH: {},
+            DELETE: {},
+        }
 
-const server = http.createServer(function(req, res)
-{
-    let method = req.method;
-    let fullPath = url.parse(req.url, true) // il true consente di parsificare i parametri  altrimenti sarebbero restituiti come stringa
+    constructor() {
+        init();
+    }
 
-    let resource = fullPath.pathname;
-    let params = fullPath.query;
+    addListener(method : string, resource : string, callback : Function)
+    {
 
-    let domain = req.headers.host;  
+    }
+}
 
-    console.log('Richiesta ricevuta : ${resource}');
-
-    res.writeHead(200,{"Content-Type": "text/html;charset=utf-8" });
-
-    res.write('<h1>Informazioni relative alla richiesta ricevuta </h1>')
-    res.write('<br>')
-    res.write('<br>')
-    res.write(`<p> Nome Del Dominio : ${domain}</p>`)
-    res.write(`<p> Metodo Della Richiesta : ${method}</p>`);
-    res.write(`<p> Risorsa Richiesta : ${resource}</p>`);
-    res.write(`<p> Parametri : ${JSON.stringify(params)}</p>`);
-
-});
-
-//Se non si specifica l'indirizzo IP il server viene avviato
-//su tutte le interfacce disponibili
-
-server.listen(PORT)
-console.log(`Server in ascolto sula porta : ${PORT}`)
+function init() {
+    fs.readFile('static/error.html', function (err, data) {
+        if(!err)
+        {
+            paginaVuota = data.toString();
+        }
+        else
+        {
+            paginaVuota = '<h2> Risorsa non trovata </h2>'
+        }
+    })
+}
