@@ -1,36 +1,29 @@
-import fs from 'fs';
-let paginaVuota: string;
+import http from 'http';
+import dispatcher from './dispatcher' //con typescript non si mette l'estensione del file
+import headers from './static/headers.json'
 
-class Dispatcher {
-    prompt: string = ">>>";
-    listeners: Object =
-        {
-            GET: {},
-            POST: {},
-            PUT: {},
-            PATCH: {},
-            DELETE: {},
-        }
+const PORT = 1337 //La porta di NODE
 
-    constructor() {
-        init();
-    }
+const server = http.createServer(function(req, res){ //questa function di callback viene richiamata quando arriva una richiesta client
 
-    addListener(method : string, resource : string, callback : Function)
-    {
+});
 
-    }
-}
+server.listen(PORT, function()
+{
+    console.log('Server in ascolto sulla porta : ' + PORT);
+})
 
-function init() {
-    fs.readFile('static/error.html', function (err, data) {
-        if(!err)
-        {
-            paginaVuota = data.toString();
-        }
-        else
-        {
-            paginaVuota = '<h2> Risorsa non trovata </h2>'
-        }
-    })
-}
+/***  Registrazione dei listener ***/
+
+dispatcher.addListener('GET', '/api/servizio2', function(req, res){
+    res.writeHead(200, headers.json)
+    res.write(JSON.stringify('Benvenuto'))
+    res.end()
+})
+
+
+dispatcher.addListener('POST', '/api/servizio2', function(req, res){
+    res.writeHead(200, headers.json)
+    res.write(JSON.stringify('Benvenuto'))
+    res.end()
+})
