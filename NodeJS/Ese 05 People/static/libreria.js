@@ -1,7 +1,19 @@
 "use strict";
 
-const _URL =  "" // "http://localhost:1337"
+const _URL = "http://localhost:1337"
 // Se vuota viene assegnata in automatico l'origine da cui è stata scaricata la pagina
+
+/*    $("#btnInvia1").on("click", async function() {
+        let data = await inviaRichiesta("get", "/api/servizio1", {"nome":"pippo"})
+        if (data)
+            alert(JSON.stringify(data));
+    });
+ */
+
+
+//localhost:5500 <- Client
+//localhost:1337 <- Server
+
 
 async function inviaRichiesta(method, url="", params={}) {
 	method = method.toUpperCase()
@@ -17,7 +29,6 @@ async function inviaRichiesta(method, url="", params={}) {
 		// riduce il timeout rispetto al default (6s) ma non sembra possibile incrementarlo
 		//"signal": AbortSignal.timeout(500) 
     }
-		
   	if(method=="GET") url += "?" + new URLSearchParams(params)
 	else {
 		if(params instanceof FormData){

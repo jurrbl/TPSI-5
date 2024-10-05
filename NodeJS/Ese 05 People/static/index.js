@@ -17,8 +17,12 @@ $(document).ready(function() {
     _divDettagli.hide()
 
 
- 
- 
+    let rq = inviaRichiesta("GET", "/countries")
+    rq.then(function(response)
+    {
+        console.log(response)
+    })
+  
  
  
 })
