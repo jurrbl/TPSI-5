@@ -8,6 +8,7 @@ const PORT = 1337;
 // Leggi i dati delle persone da people.json
 const peopleData = JSON.parse(fs.readFileSync('./people.json', 'utf-8'));
 
+
 // Crea il server
 const server = http.createServer(function (req, res) {
   // Aggiungi intestazioni CORS
@@ -25,8 +26,16 @@ server.listen(PORT, function () {
 });
 
 /***  Registrazione dei listener ***/
-dispatcher.addListener('GET', '/country', function (req, res) {
+dispatcher.addListener('GET', '/countries', function (req, res) {
   res.writeHead(200, headers.json);
   res.write(JSON.stringify(peopleData)); // Assicurati di inviare i dati delle persone
   res.end();
 });
+
+/***  Registrazione dei listener ***/
+dispatcher.addListener('GET', '/people',function (req, res) {
+  res.writeHead(200, headers.json);
+  res.write(JSON.stringify(peopleData)); // Assicurati di inviare i dati delle persone
+  res.end();
+});
+
