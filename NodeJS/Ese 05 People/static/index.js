@@ -22,24 +22,20 @@ $(document).ready(function () {
 		// Usa un Set per rimuovere i duplicati e poi crea un array ordinato
 		let sortedNations = [...new Set(vectNations)].sort();
 
-		
-
 
 		sortedNations.forEach(singleNation => {
 			let option = $("<a></a>");
 			option.text(singleNation);
 			option.val(singleNation);
 			option.addClass("dropdown-item")
-            option.click(function() {
-                currentCountry = singleNation;
-                _dropdownButton.text(currentCountry);
-                sendPeopleRequest(currentCountry);
-            });
-			
-            _lstNazioni.append(option);
-		});
+			option.click(function () {
+				currentCountry = singleNation;
+				_dropdownButton.text(currentCountry);
+				sendPeopleRequest(currentCountry);
+			});
 
-		
+			_lstNazioni.append(option);
+		});
 
 
 	}).catch(function (error) {
@@ -48,11 +44,6 @@ $(document).ready(function () {
 });
 
 
-function sendPeopleRequest(clickedNation) {
-    let rq = inviaRichiesta("GET", "/people", { country: clickedNation });
-    
-    rq.then(function(response)
-{
-    console.log(response)
-})
+function sendPeopleRequest(clickedNation) { // Crea l'URL con il parametro 'country' in modo corretto
+	
 }

@@ -1,60 +1,60 @@
 {
-    "results": [{
-            "gender": "female",
-            "name": {
-                "title": "Mrs",
-                "first": "Jessica",
-                "last": "Martin"
-            },
-            "location": {
-                "street": {
-                    "number": 8953,
-                    "name": "Oxford Terrace"
+        "results": [{
+                "gender": "female",
+                "name": {
+                    "title": "Mrs",
+                    "first": "Jessica",
+                    "last": "Martin"
                 },
-                "city": "Whanganui",
-                "state": "Canterbury",
-                "country": "New Zealand",
-                "postcode": 49889,
-                "coordinates": {
-                    "latitude": "58.9033",
-                    "longitude": "82.9725"
+                "location": {
+                    "street": {
+                        "number": 8953,
+                        "name": "Oxford Terrace"
+                    },
+                    "city": "Whanganui",
+                    "state": "Canterbury",
+                    "country": "New Zealand",
+                    "postcode": 49889,
+                    "coordinates": {
+                        "latitude": "58.9033",
+                        "longitude": "82.9725"
+                    },
+                    "timezone": {
+                        "offset": "+9:00",
+                        "description": "Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
+                    }
                 },
-                "timezone": {
-                    "offset": "+9:00",
-                    "description": "Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
-                }
+                "email": "jessica.martin@example.com",
+                "login": {
+                    "uuid": "776deae2-75d7-4be5-85a1-03f84ffefc82",
+                    "username": "bigbird324",
+                    "password": "paradigm",
+                    "salt": "u1ET5wrw",
+                    "md5": "0d0cd9988fae1becc185f04e4e3d4d0e",
+                    "sha1": "f7aa0d5e47ec2581f87acc1c2954999f5377e4d7",
+                    "sha256": "b7b37fabf8c118c65111dfefce74a15e6ec7a74c3adacb56252f326012be7ec7"
+                },
+                "dob": {
+                    "date": "1996-05-07T19:27:49.079Z",
+                    "age": 23
+                },
+                "registered": {
+                    "date": "2011-06-06T21:09:43.107Z",
+                    "age": 8
+                },
+                "phone": "(998)-975-1431",
+                "cell": "(121)-660-3451",
+                "id": {
+                    "name": "",
+                    "value": null
+                },
+                "picture": {
+                    "large": "https://randomuser.me/api/portraits/women/28.jpg",
+                    "medium": "https://randomuser.me/api/portraits/med/women/28.jpg",
+                    "thumbnail": "https://randomuser.me/api/portraits/thumb/women/28.jpg"
+                },
+                "nat": "NZ"
             },
-            "email": "jessica.martin@example.com",
-            "login": {
-                "uuid": "776deae2-75d7-4be5-85a1-03f84ffefc82",
-                "username": "bigbird324",
-                "password": "paradigm",
-                "salt": "u1ET5wrw",
-                "md5": "0d0cd9988fae1becc185f04e4e3d4d0e",
-                "sha1": "f7aa0d5e47ec2581f87acc1c2954999f5377e4d7",
-                "sha256": "b7b37fabf8c118c65111dfefce74a15e6ec7a74c3adacb56252f326012be7ec7"
-            },
-            "dob": {
-                "date": "1996-05-07T19:27:49.079Z",
-                "age": 23
-            },
-            "registered": {
-                "date": "2011-06-06T21:09:43.107Z",
-                "age": 8
-            },
-            "phone": "(998)-975-1431",
-            "cell": "(121)-660-3451",
-            "id": {
-                "name": "",
-                "value": null
-            },
-            "picture": {
-                "large": "https://randomuser.me/api/portraits/women/28.jpg",
-                "medium": "https://randomuser.me/api/portraits/med/women/28.jpg",
-                "thumbnail": "https://randomuser.me/api/portraits/thumb/women/28.jpg"
-            },
-            "nat": "NZ"
-        },
         {
             "gender": "male",
             "name": {

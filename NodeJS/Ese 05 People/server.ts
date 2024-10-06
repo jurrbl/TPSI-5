@@ -33,9 +33,8 @@ dispatcher.addListener('GET', '/countries', function (req, res) {
 });
 
 /***  Registrazione dei listener ***/
-dispatcher.addListener('GET', '/people',function (req, res) {
+dispatcher.addListener('GET', '/people', function (req, res) {
   res.writeHead(200, headers.json);
-  res.write(JSON.stringify(peopleData)); // Assicurati di inviare i dati delle persone
+  console.log(req.url)
   res.end();
 });
-
