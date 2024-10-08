@@ -1,6 +1,6 @@
 "use strict";
 
-const _URL =  "" // "http://localhost:1337"
+const _URL =  "http://localhost:1337"
 // Se vuota viene assegnata in automatico l'origine da cui è stata scaricata la pagina
 
 async function inviaRichiesta(method, url="", params={}) {

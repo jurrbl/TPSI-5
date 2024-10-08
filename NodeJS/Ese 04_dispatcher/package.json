@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "mime": "^4.0.4",
     "mime-types": "^2.1.35"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5"
   }
 }
