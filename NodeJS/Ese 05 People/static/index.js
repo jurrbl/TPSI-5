@@ -3,47 +3,34 @@ let people; // vettore enumerativo delle Persone attualmente visualizzate
 let currentPos; // Posizione del dettaglio corrente (rispetto al vettore enumerativo people)
 let vectNations = [];
 
-$(document).ready(function () {
+window.onload= async function () {
 	let _lstNazioni = $("#lstNazioni");
 	let _tabStudenti = $("#tabStudenti");
 	let _divDettagli = $("#divDettagli");
 	let _dropdownButton = $("#dropdownMenuButton");
 	_divDettagli.hide();
 
-	let rq = inviaRichiesta("GET", "/countries");
-	rq.then(function (response) {
-		let nations = response.results;
-		vectNations = [];
-		nations.forEach(user => {
-			let countryName = user.location.country;
-			vectNations.push(countryName);
-		});
-
-		// Usa un Set per rimuovere i duplicati e poi crea un array ordinato
-		let sortedNations = [...new Set(vectNations)].sort();
-
-
-		sortedNations.forEach(singleNation => {
-			let option = $("<a></a>");
-			option.text(singleNation);
-			option.val(singleNation);
-			option.addClass("dropdown-item")
-			option.click(function () {
-				currentCountry = singleNation;
-				_dropdownButton.text(currentCountry);
-				sendPeopleRequest(currentCountry);
-			});
-
-			_lstNazioni.append(option);
-		});
-
-
-	}).catch(function (error) {
-		console.error("Errore nella richiesta:", error);
-	});
-});
-
-
-function sendPeopleRequest(clickedNation) { // Crea l'URL con il parametro 'country' in modo corretto
+	let countries  = await inviaRichiesta("GET", "/api/country");
+	if(countries)
+	{
+		console.log(countries)
+		countries.forEach(nations => {
+			$("<a>").addClass("dropdown-item").prop('href', '#').text(nations).appendTo(_lstNazioni)
+			.on("click", function(){
+				let currentCountry = $(this).text();
+				_dropdownButton.text(currentCountry)
+				sendPeopleRequest(currentCountry)
+			})
 	
+		});
+	}
+
+};
+
+
+async function sendPeopleRequest(clickedNation) { // Crea l'URL con il parametro 'country' in modo corretto
+	console.log(clickedNation)
+	let people = await inviaRichiesta("GET", "/api/people", {'country' : clickedNation})
+	if(people)
+		console.log(people);
 }

@@ -1,13 +1,10 @@
 import * as http from 'http';
 import dispatcher from './dispatcher'; 
-import headers from './static/headers.json'; 
+import headers from './headers.json'; 
 import fs from 'fs';
+import people from './people.json';  // people.json contiene un oggetto con una proprietà "results"
 
 const PORT = 1337;
-
-// Leggi i dati delle persone da people.json
-const peopleData = JSON.parse(fs.readFileSync('./people.json', 'utf-8'));
-
 
 // Crea il server
 const server = http.createServer(function (req, res) {
@@ -26,15 +23,32 @@ server.listen(PORT, function () {
 });
 
 /***  Registrazione dei listener ***/
-dispatcher.addListener('GET', '/countries', function (req, res) {
+
+// Listener per /api/country, usa i dati da people.json
+dispatcher.addListener('GET', '/api/country', function (req: any, res: any) {
+  const countries: string[] = [];
+
+  // Itera su ogni persona in people.results e prendi il nome del paese
+  people.results.forEach((person: any) => {
+    let countryName = person.location.country;
+    countries.push(countryName);
+  });
+
+  // Usa un Set per rimuovere i duplicati e poi crea un array ordinato
+  let sortedNations = [...new Set(countries)].sort();
+
+  // Rispondi con l'elenco ordinato di paesi in formato JSON
   res.writeHead(200, headers.json);
-  res.write(JSON.stringify(peopleData)); // Assicurati di inviare i dati delle persone
+  res.write(JSON.stringify(sortedNations));
   res.end();
 });
 
-/***  Registrazione dei listener ***/
-dispatcher.addListener('GET', '/people', function (req, res) {
+// Listener per /people, restituisce tutto il contenuto di people.results
+dispatcher.addListener('GET', '/api/people', function (req, res) {
+  const country = req['GET']['country']; // Recupera la nazione dalla query
+  const peopleInCountry = people.results.filter(person => person.location.country === country); // Filtra le persone per paese
+  console.log(peopleInCountry)
   res.writeHead(200, headers.json);
-  console.log(req.url)
+  res.write(JSON.stringify(peopleInCountry)); // Invia l'array filtrato di persone
   res.end();
 });
