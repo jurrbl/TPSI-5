@@ -2,12 +2,12 @@ import * as http from 'http';
 import dispatcher from './dispatcher'; 
 import headers from './headers.json'; 
 import fs from 'fs';
-import people from './people.json';  // people.json contiene un oggetto con una proprietà "results"
+import news from './news.json';  // people.json contiene un oggetto con una proprietà "results"
 import { format } from 'path';
 
 const PORT = 1337;
 
-function formatPeopleData(peopleList) {
+/* function formatPeopleData(peopleList) {
   return peopleList.map(person => ({
     image : `${person.picture.large}`,
     name: `${person.name.title} ${person.name.first} ${person.name.last}`,
@@ -20,7 +20,17 @@ function formatPeopleData(peopleList) {
     dob: person.dob
 
   }));
+} */
+
+  
+  function formatNewsData(newsList) {
+    return newsList.map(newsItem => ({
+        titolo: newsItem.titolo,
+        visualizzazioni: newsItem.visualizzazioni,
+        file: newsItem.file
+    }));
 }
+
 
 
 // Crea il server
@@ -42,31 +52,25 @@ server.listen(PORT, function () {
 /***  Registrazione dei listener ***/
 
 // Listener per /api/country, usa i dati da people.json
-dispatcher.addListener('GET', '/api/country', function (req: any, res: any) {
-  const countries: string[] = [];
+dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
+  const notizie: string[] = [];
 
-  // Itera su ogni persona in people.results e prendi il nome del paese
-  people.results.forEach((person: any) => {
-    let countryName = person.location.country;
-    countries.push(countryName);
+  
+  news.forEach(notizia => {
+    console.log(notizia)
+    notizie.push(JSON.stringify(notizia))
   });
 
-  // Usa un Set per rimuovere i duplicati e poi crea un array ordinato
-  let sortedNations = [...new Set(countries)].sort();
-
   res.writeHead(200, headers.json);
-  res.write(JSON.stringify(sortedNations));
+  res.write(JSON.stringify(notizie));
+
   res.end();
 });
 
 // Listener per /people, restituisce tutto il contenuto di people.results
-dispatcher.addListener('GET', '/api/people', function (req, res) {
+dispatcher.addListener('GET', '/api/dettagli', function (req, res) {
+  const news = req['GET']['file']; // Recupera la nazione dalla query
+  
 
-  const country = req['GET']['country']; // Recupera la nazione dalla query
-  const peopleInCountry = people.results.filter(person => person.location.country === country); // Filtra le persone per paese
-
-  const formattedData = formatPeopleData(peopleInCountry);
-  res.writeHead(200, headers.json);
-  res.write(JSON.stringify(formattedData)); // Invia l'array filtrato di persone
-  res.end();
+ 
 });
