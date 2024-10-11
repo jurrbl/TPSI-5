@@ -28,16 +28,17 @@ function formatNewsData(stateList) {
   return stateList.map(stateItem => ({
     name: stateItem.name,
     stationCount: stateItem.stationcount,
-
   }));
 }
 function formatRadioData(radioList) {
   return radioList.map(radioItem => ({
-    favicon: radioItem.favicon,
+    id : radioItem.id,
+    icons : radioItem.favicon,
     nome: radioItem.name,
     codec: radioItem.codec,
     bitrate: radioItem.bitrate,
     votes: radioItem.votes
+
   }));
 }
 
@@ -67,23 +68,56 @@ dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
 
 
   states.forEach(state => {
-    console.log(state)
+  
     eachState.push(JSON.stringify(state))
   });
-  const formattedData = formatNewsData(states)
+ 
   res.writeHead(200, headers.json);
   res.write(JSON.stringify(states));
   res.end();
 });
 
 // Listener per /people, restituisce tutto il contenuto di people.results
+// Listener per /api/radios
 dispatcher.addListener('POST', '/api/radios', function (req, res) {
-  const name = req['body']['name'];  // Ottieni il nome dalla query string
-  const filteredRadios = radios.filter(radio => radio.name === name);  // Filtra le radio per la regione selezionata
-  // Formatt i dati delle radio filtrate
-  const formattedData = formatRadioData(filteredRadios);
-  // Imposta l'intestazione e invia i dati formattati al client
+  const radiosForNations: any[] = [];
+  const { clickedState } = req['BODY'];  // Get the clickedState from the request body
+  console.log('STATO DEL DIO: ' + clickedState);  // Debugging log
+
+  radios.forEach(singolaRadio => {
+      if (JSON.stringify(singolaRadio.state) === JSON.stringify(clickedState)) {
+          radiosForNations.push(singolaRadio);  // Don't stringify individual radio objects
+      }
+  });
+
+  const formattedRadio = formatRadioData(radiosForNations);  // Format the array of radio stations
+
+  console.log(formattedRadio);  // Debugging log to check the output
   res.writeHead(200, headers.json);
-  res.write(JSON.stringify(formattedData));
+  res.write(JSON.stringify(formattedRadio));  // Send back the formatted radio data as a JSON string
   res.end();
+});
+
+dispatcher.addListener('PATCH', '/api/like', function (req: any, res: any) {
+
+  const { id } = req['BODY']
+  console.log('disdiasdisad : ' + id)
+  fs.readFile(`radios.json`, (err, data) => {
+    if (err) {
+        res.writeHead(500, headers.json);
+        res.write(JSON.stringify({ message: 'Internal server error' }));
+        res.end();
+        return;
+    }
+
+    const selectedLike = radios.find(r => r.id === id);
+    if (selectedLike) {
+      selectedLike.votes = selectedLike.votes + 1;
+    }
+
+    res.writeHead(200, headers.json);
+    res.write(JSON.stringify({ data: data.toString() }));
+    res.end();
+});
+
 });

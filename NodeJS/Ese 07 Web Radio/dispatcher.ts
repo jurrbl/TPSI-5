@@ -71,28 +71,34 @@ class Dispatcher {
         let method = req.method.toUpperCase();
         if (method == 'GET') {
             this.innerDispatch(req, res);
-        }
-        else {
+        } else {
             // L'evento on data viene richiamato ogni volta che arrivano parametri nel body dal client
             let params = '';
             let jsonParams;
             req.on('data', function (data) {
                 params += data;
             });
+            
             // L'evento on end viene richiamato in corrispondenza della fine dei parametri nel body
             req.on('end', () => {
                 try {
+                    // Attempt to parse the body as JSON
                     jsonParams = JSON.parse(params);
                 } catch (err) {
-                    console.log('Parametri POST ignorati perchè in formato non valido');
+                    console.log('Parametri POST ignorati perchè in formato non valido:', params);
                 }
-                if(Object.keys(jsonParams).length > 0) {
+                
+                // Only assign to req['BODY'] if jsonParams is defined and has keys
+                if (jsonParams && Object.keys(jsonParams).length > 0) {
                     req['BODY'] = jsonParams;
                 }
+                
+                // Call the inner dispatch function
                 this.innerDispatch(req, res);
             });
         }
     }
+    
 
     private init() {
         fs.readFile('static/error.html', (err, data) => {

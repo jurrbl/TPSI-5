@@ -1,22 +1,102 @@
 [
-	{"name":"Piemonte","value":"Piemonte","stationcount":"5"},
-	{"name":"Valle d'Aosta","value":"Valle d'Aosta","stationcount":"52"},
-	{"name":"Lombardia","value":"Lombardia","stationcount":"2"},
-	{"name":"Trentino-Alto Adige\/S\u00fcdtirol","value":"Trentino-Alto Adige\/Südtirol","stationcount":"3"},
-	{"name":"Veneto","value":"Veneto","stationcount":"0"},
-	{"name":"Friuli-Venezia Giulia","value":"Friuli-Venezia Giulia","stationcount":"4"},
-	{"name":"Liguria","value":"Liguria","stationcount":"0"},
-	{"name":"Emilia-Romagna","value":"Emilia-Romagna","stationcount":"5"},
-	{"name":"Toscana","value":"Toscana","stationcount":"0"},
-	{"name":"Marche","value":"Marche","stationcount":"5"},
-	{"name":"Umbria","value":"Umbria","stationcount":"1"},
-	{"name":"Abruzzo","value":"Abruzzo","stationcount":"15"},
-	{"name":"Molise","value":"Molise","stationcount":"53"},
-	{"name":"Lazio","value":"Lazio","stationcount":"33"},
-	{"name":"Campania","value":"Campania","stationcount":"20"},
-	{"name":"Puglia","value":"Puglia","stationcount":"9"},
-	{"name":"Basilicata","value":"Basilicata","stationcount":"6"},
-	{"name":"Calabria","value":"Calabria","stationcount":"6"},
-	{"name":"Sicilia","value":"Sicilia","stationcount":"23"},
-	{"name":"Sardegna","value":"Sardegna","stationcount":"11"}
+	{
+		"name": "Piemonte",
+		"value": "Piemonte",
+		"stationcount": "5"
+	},
+	{
+		"name": "Valle d'Aosta",
+		"value": "Valle d'Aosta",
+		"stationcount": "52"
+	},
+	{
+		"name": "Lombardia",
+		"value": "Lombardia",
+		"stationcount": "2"
+	},
+	{
+		"name": "Trentino-Alto Adige\/S\u00fcdtirol",
+		"value": "Trentino-Alto Adige\/Südtirol",
+		"stationcount": "3"
+	},
+	{
+		"name": "Veneto",
+		"value": "Veneto",
+		"stationcount": "0"
+	},
+	{
+		"name": "Friuli-Venezia Giulia",
+		"value": "Friuli-Venezia Giulia",
+		"stationcount": "4"
+	},
+	{
+		"name": "Liguria",
+		"value": "Liguria",
+		"stationcount": "0"
+	},
+	{
+		"name": "Emilia-Romagna",
+		"value": "Emilia-Romagna",
+		"stationcount": "5"
+	},
+	{
+		"name": "Toscana",
+		"value": "Toscana",
+		"stationcount": "0"
+	},
+	{
+		"name": "Marche",
+		"value": "Marche",
+		"stationcount": "5"
+	},
+	{
+		"name": "Umbria",
+		"value": "Umbria",
+		"stationcount": "1"
+	},
+	{
+		"name": "Abruzzo",
+		"value": "Abruzzo",
+		"stationcount": "15"
+	},
+	{
+		"name": "Molise",
+		"value": "Molise",
+		"stationcount": "53"
+	},
+	{
+		"name": "Lazio",
+		"value": "Lazio",
+		"stationcount": "33"
+	},
+	{
+		"name": "Campania",
+		"value": "Campania",
+		"stationcount": "20"
+	},
+	{
+		"name": "Puglia",
+		"value": "Puglia",
+		"stationcount": "9"
+	},
+	{
+		"name": "Basilicata",
+		"value": "Basilicata",
+		"stationcount": "6"
+	},
+	{
+		"name": "Calabria",
+		"value": "Calabria",
+		"stationcount": "6"
+	},
+	{
+		"name": "Sicilia",
+		"value": "Sicilia",
+		"stationcount": "23"
+	},
+	{
+		"name": "Sardegna",
+		"value": "Sardegna",
+		"stationcount": "11"
+	}
 ]
