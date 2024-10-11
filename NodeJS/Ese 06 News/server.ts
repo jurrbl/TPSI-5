@@ -1,36 +1,20 @@
 import * as http from 'http';
-import dispatcher from './dispatcher'; 
-import headers from './headers.json'; 
+import dispatcher from './dispatcher';
+import headers from './headers.json';
 import fs from 'fs';
-import news from './news.json';  // people.json contiene un oggetto con una proprietà "results"
-import { format } from 'path';
+import news from './news.json';
+import path from 'path'
+import { json } from 'stream/consumers';
 
 const PORT = 1337;
 
-/* function formatPeopleData(peopleList) {
-  return peopleList.map(person => ({
-    image : `${person.picture.large}`,
-    name: `${person.name.title} ${person.name.first} ${person.name.last}`,
-    city: person.location.city,
-    state: person.location.state,
-    cell: person.cell,
-    gender: person.gender,
-    address: person.location,
-    email: person.email,
-    dob: person.dob
-
+function formatNewsData(newsList) {
+  return newsList.map(newsItem => ({
+    titolo: newsItem.titolo,
+    visualizzazioni: newsItem.visualizzazioni,
+    file: newsItem.file
   }));
-} */
-
-  
-  function formatNewsData(newsList) {
-    return newsList.map(newsItem => ({
-        titolo: newsItem.titolo,
-        visualizzazioni: newsItem.visualizzazioni,
-        file: newsItem.file
-    }));
 }
-
 
 
 // Crea il server
@@ -53,16 +37,37 @@ server.listen(PORT, function () {
 
 // Listener per /api/country, usa i dati da people.json
 dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
-  const notizie: string[] = [];
 
-  
-  news.forEach(notizia => {
-    console.log(notizia)
-    notizie.push(JSON.stringify(notizia))
+  const eachNews: string[] = []
+
+  news.forEach(singleNews => {
+    console.log(singleNews)
+    eachNews.push(JSON.stringify(singleNews))
   });
-  const formattedData = formatNewsData(notizie)
-  res.writeHead(200, headers.json);
-  res.write(JSON.stringify(formattedData));
 
+  const formattedNews = formatNewsData(news)
+  res.writeHead(200, headers.json);
+  res.write(JSON.stringify(formattedNews));
   res.end();
+});
+
+dispatcher.addListener('POST', '/api/dettagli', function (req: any, res: any) {
+  const { file } = req['BODY'];
+
+    const index = news.findIndex(function (p) {
+        return JSON.stringify(p.file) == JSON.stringify(file);
+    });
+
+    fs.readFile('./news.json', function (err) {
+        if (!err) {
+            res.writeHead(200, headers.json);
+            res.write(JSON.stringify(news));
+            res.end();
+        }
+        else {
+            res.writeHead(500, headers.text);
+            res.write('Impossibile salvare i dati');
+            res.end();
+        }
+    });
 });

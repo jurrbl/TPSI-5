@@ -1,18 +1,25 @@
 let currentNews;
-
+let wrapper;
 window.onload = async function () {
-    let wrapper = $("#wrapper");
 
+    wrapper = $("#wrapper");
 
-        // Recupera le notizie dal server
-        let news = await inviaRichiesta("GET", "/api/elenco");
+    let elenco = await inviaRichiesta("GET", "/api/elenco")
+    if(elenco)
+        console.log(elenco)
 
-        // Controlla se 'news' è definito e se è un array
-        if (news) {
-            news.forEach(element => {
-                console.log(element.titolo)
-            });
-        }
-        
-    
+    elenco.forEach(singleNews => {
+        $("<span>").addClass("titolo").text(singleNews.titolo).appendTo(wrapper)
+        $("<a>").prop("href", "#").text(" Leggi ").appendTo(wrapper)
+        .on("click", async function()
+        {
+            let selectedNews = $(this).text();
+            let news = await inviaRichiesta("POST", "/api/dettagli", {'file' : singleNews.file})
+            if(news)
+                console.log(news)
+        })
+        $("<span>").addClass("nVis").text(" [Visualizzato : " + singleNews.visualizzazioni + " volte]").appendTo(wrapper)
+        $("<br>").appendTo(wrapper)
+    });
+
 };
