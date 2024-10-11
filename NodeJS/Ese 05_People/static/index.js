@@ -56,7 +56,7 @@ async function sendPeopleRequest(clickedNation) {
         `;
         _tabStudenti.append(row); // Aggiungi riga alla tabella
     });
-
+    
     // Delegazione degli eventi click per i bottoni "Dettagli"
     _tabStudenti.off("click", ".confirmButton"); // Rimuovi eventuali listener precedenti per evitare duplicazioni
     _tabStudenti.on("click", ".confirmButton", function () {
@@ -72,6 +72,7 @@ async function sendPeopleRequest(clickedNation) {
         const row = $(this).closest("tr");
         row.remove();
 
+
         // Aggiorna l'array people dopo la rimozione
         const index = $(this).data('index');
         people.splice(index, 1);
@@ -81,8 +82,12 @@ async function sendPeopleRequest(clickedNation) {
             currentIndex = people.length - 1; // Ritorna all'ultimo indice valido
         }
 
+
+        
         // Mostra il nuovo studente corrente se disponibile
         showCurrentStudent();
+        showDettagli();
+
     });
 
     // Pulsanti di navigazione
@@ -128,7 +133,7 @@ function showDettagli(selectedStudentForDetails) {
     let studentImage = $('#studentImage'); // Assicurati di avere l'ID giusto per l'immagine
 
     let detailsHtml = `
-        <img src="${selectedStudentForDetails.image}" alt="Student Image" style="width: 10em; margin: 6px auto;"><br>
+        <img src="${selectedStudentForDetails.image}" class = "card-img-top" style="width:10em; margin:6px auto"><br>
         <strong>Gender:</strong> ${selectedStudentForDetails.gender}<br>
         <strong>Address:</strong> ${JSON.stringify(selectedStudentForDetails.address)}<br>
         <strong>Email:</strong> ${selectedStudentForDetails.email}<br>

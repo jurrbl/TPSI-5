@@ -2,5 +2,8 @@
   "devDependencies": {
     "@types/node": "^22.7.5",
     "tsx": "^4.19.1"
+  },
+  "dependencies": {
+    "mime": "^4.0.4"
   }
 }
