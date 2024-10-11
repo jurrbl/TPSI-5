@@ -16,6 +16,12 @@ function formatNewsData(newsList) {
   }));
 }
 
+function formatNewsText(textNews) {
+  return textNews.map(newsItem => ({
+    file : newsItem.file,
+  }));
+}
+
 
 // Crea il server
 const server = http.createServer(function (req, res) {
@@ -52,11 +58,29 @@ dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
   res.end();
 });
 
-dispatcher.addListener('POST', '/api/dettagli', function (req: any, res: any) {
-  const { file } = req['BODY'].file;
-  console.log(file);
-  const fileString : string [] = []
 
-  const filestamp = fs.readFileSync(`${file}.txt`, 'utf-8')
-  console.log(filestamp)
+dispatcher.addListener('POST', '/api/dettagli', function (req: any, res: any) {
+  const { file } = req['BODY'];
+
+  fs.readFile(`news/${file}`, function(err, data)
+  {
+    if (err) 
+    {
+      res.writeHead(500, headers.json);
+      res.write(JSON.stringify({ message: 'Internal server error' }));
+      res.end();
+      return;
+    }
+
+    const selectedNews = news.find(news => news.file === file)
+    if(selectedNews)
+    {
+      selectedNews.visualizzazioni++;
+
+    }
+
+    res.writeHead(200, headers.text);
+    res.write(JSON.stringify(data.toString()));
+    res.end();
+  })
 });
