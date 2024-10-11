@@ -29,7 +29,6 @@ class Dispatcher {
         method = method.toUpperCase();
         if (method in this.listeners) {
             this.listeners[method][resource] = callback;
-            console.log(`Successfully registered method: ${method}, resource: ${resource}`);
         }
         else {
             throw new Error('Invalid HTTP method');
@@ -40,13 +39,14 @@ class Dispatcher {
         let method = req.method.toUpperCase();
         let fullPath = url.parse(req.url, true);
         let resource = fullPath.pathname;
+        // Parsifica solo le chiavi di 1° livello, eventuali chiavi annidate vengono restituite serializzate
         let params = fullPath.query;
 
         console.log(`${this.prompt}${method}:${resource}, params:${JSON.stringify(params)}`);
 
         // Gestione dei parametri
         req['GET'] = params;
-        if(req['BODY']) {
+        if (req['BODY']) {
             console.log(`   Parametri ${method}:${JSON.stringify(req['BODY'])}`);
         }
 
@@ -86,7 +86,7 @@ class Dispatcher {
                 } catch (err) {
                     console.log('Parametri POST ignorati perchè in formato non valido');
                 }
-                if(Object.keys(jsonParams).length > 0) {
+                if (Object.keys(jsonParams).length > 0) {
                     req['BODY'] = jsonParams;
                 }
                 this.innerDispatch(req, res);

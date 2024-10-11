@@ -46,28 +46,17 @@ dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
   });
 
   const formattedNews = formatNewsData(news)
+  
   res.writeHead(200, headers.json);
   res.write(JSON.stringify(formattedNews));
   res.end();
 });
 
 dispatcher.addListener('POST', '/api/dettagli', function (req: any, res: any) {
-  const { file } = req['BODY'];
+  const { file } = req['BODY'].file;
+  console.log(file);
+  const fileString : string [] = []
 
-    const index = news.findIndex(function (p) {
-        return JSON.stringify(p.file) == JSON.stringify(file);
-    });
-
-    fs.readFile('./news.json', function (err) {
-        if (!err) {
-            res.writeHead(200, headers.json);
-            res.write(JSON.stringify(news));
-            res.end();
-        }
-        else {
-            res.writeHead(500, headers.text);
-            res.write('Impossibile salvare i dati');
-            res.end();
-        }
-    });
+  const filestamp = fs.readFileSync(`${file}.txt`, 'utf-8')
+  console.log(filestamp)
 });

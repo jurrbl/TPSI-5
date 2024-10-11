@@ -14,9 +14,11 @@ window.onload = async function () {
         .on("click", async function()
         {
             let selectedNews = $(this).text();
-            let news = await inviaRichiesta("POST", "/api/dettagli", {'file' : singleNews.file})
+            
+           /*  let news = await inviaRichiesta("POST", "/api/dettagli", {'file' : singleNews.file})
             if(news)
-                console.log(news)
+                console.log(JSON.stringify(news)) */
+
         })
         $("<span>").addClass("nVis").text(" [Visualizzato : " + singleNews.visualizzazioni + " volte]").appendTo(wrapper)
         $("<br>").appendTo(wrapper)
