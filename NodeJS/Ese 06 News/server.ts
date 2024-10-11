@@ -60,17 +60,9 @@ dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
     console.log(notizia)
     notizie.push(JSON.stringify(notizia))
   });
-
+  const formattedData = formatNewsData(notizie)
   res.writeHead(200, headers.json);
-  res.write(JSON.stringify(notizie));
+  res.write(JSON.stringify(formattedData));
 
   res.end();
-});
-
-// Listener per /people, restituisce tutto il contenuto di people.results
-dispatcher.addListener('GET', '/api/dettagli', function (req, res) {
-  const news = req['GET']['file']; // Recupera la nazione dalla query
-  
-
- 
 });
