@@ -42,7 +42,8 @@ async function GET_BODYRADIO(statoSelezionato) {
 				src: RADIODATA.icons,
 				style: 'width:40px',
 				alt: 'Radio Icon'
-			}));
+			}).attr('onerror', "this.src='favicon.ico'"));
+			
 
 			let nome = $('<td></td>').text(RADIODATA.nome);
 			let codec = $('<td></td>').text(RADIODATA.codec);
@@ -74,4 +75,5 @@ async function GET_LIKESTATE(idLike) {
   let like = await inviaRichiesta("PATCH" , "/api/like", {idLike})
   if(like)
     alert('Like Effettuato!!')
+ 
 }
