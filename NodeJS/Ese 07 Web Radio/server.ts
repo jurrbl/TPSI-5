@@ -63,6 +63,8 @@ server.listen(PORT, function () {
 // Listener per /api/elenco, restituisce l'elenco aggiornato degli stati
 dispatcher.addListener('GET', '/api/elenco', function (req: any, res: any) {
   const datiAggiornati = updateStationCount(statesData, radiosData);
+
+  writeJsonFile('./states.json', datiAggiornati)
   res.writeHead(200, headers.json);
   res.write(JSON.stringify(datiAggiornati));
   res.end();
