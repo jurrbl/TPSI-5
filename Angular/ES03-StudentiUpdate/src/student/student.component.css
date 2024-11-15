@@ -1,0 +1,22 @@
+.female{
+  background-color: pink;
+  font-style: italic;
+}
+
+.male{
+  background-color: cyan;
+  font-style: italic;
+}
+
+.underlined{
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.student{
+  display: inline-block;
+  width: 280px;
+  padding: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}

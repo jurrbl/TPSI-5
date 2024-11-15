@@ -1,0 +1,12 @@
+.item{
+  margin:10px;
+
+}
+
+.wrapper{
+  width: 600px;
+  margin-top: 25px;
+  text-align: center;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+}

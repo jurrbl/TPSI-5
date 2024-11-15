@@ -1,0 +1,10 @@
+<p (click)="onStudentClick()" [ngClass]="{
+  'female': student.gender == 'F',
+  'male': student.gender == 'M',
+  'underlined': !student.present
+}">
+  Student {{ student.name }} from {{ student.city }} is
+  <span *ngIf="student.present; else absent">Present</span>
+
+  <ng-template #absent><span>Absent</span></ng-template>
+</p>
