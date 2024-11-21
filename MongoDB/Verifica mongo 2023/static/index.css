@@ -1,0 +1,22 @@
+h1{
+    text-align:center; 
+    padding:15px;
+}
+
+.optContainer{
+    display:inline-block;
+}
+.form-check-label{  
+    width:350px;
+}
+
+
+.detailsContainer{
+    border:1px solid #ddd;
+    display:flex;
+    margin-top:20px;
+}
+
+.detailsContainer img{
+    max-height:140px;
+}

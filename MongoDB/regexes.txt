@@ -1,0 +1,154 @@
+// Match exact string ignoring case
+{ field: { $regex: /^value$/i } }
+// Example: Match documents where "field" is "value" (case-insensitive).
+
+// Match any string containing "value" (case-sensitive)
+{ field: { $regex: /value/ } }
+// Example: Match documents where "field" contains "value".
+
+// Match strings ending with "value"
+{ field: { $regex: /value$/ } }
+// Example: Match "this is value".
+
+
+
+// Match string containing "value" ignoring case
+{ field: { $regex: /value/i } }
+// Example: Match "VALUE" or "value" or "VaLuE".
+
+// Match strings starting with "value" ignoring case
+{ field: { $regex: /^value/i } }
+// Example: Match "Value is great".
+
+// Match strings ending with "value" ignoring case
+{ field: { $regex: /value$/i } }
+// Example: Match "It is Value".
+
+
+// Match the whole word "value"
+{ field: { $regex: /\bvalue\b/ } }
+// Example: Match "value" but not "valuable".
+
+// Match "value" as part of a word
+{ field: { $regex: /\Bvalue\B/ } }
+// Example: Match "valuable" but not "value".
+
+
+// Match any lowercase letters
+{ field: { $regex: /[a-z]+/ } }
+// Example: Match "abc", "xyz".
+
+// Match any uppercase letters
+{ field: { $regex: /[A-Z]+/ } }
+// Example: Match "ABC", "XYZ".
+
+// Match any alphanumeric characters
+{ field: { $regex: /[a-zA-Z0-9]+/ } }
+// Example: Match "abc123", "ABC456".
+
+// Match any special characters
+{ field: { $regex: /[^a-zA-Z0-9]+/ } }
+// Example: Match "!@#", "$%^".
+
+
+
+// Match any character
+{ field: { $regex: /v.lue/ } }
+// Example: Matches "value", "v1lue", "vxlue".
+
+// Match "val", "value", "valuable", etc.
+{ field: { $regex: /val.*/ } }
+// Example: Matches "valiant", "valve".
+
+
+// Match "value" appearing exactly 3 times
+{ field: { $regex: /(value){3}/ } }
+// Example: Matches "valuevaluevalue".
+
+// Match "value" appearing 0 or more times
+{ field: { $regex: /value*/ } }
+// Example: Matches "", "value", "valueeee".
+
+// Match "value" appearing 1 or more times
+{ field: { $regex: /value+/ } }
+// Example: Matches "value", "valueee".
+
+// Match "value" appearing between 2 and 4 times
+{ field: { $regex: /(value){2,4}/ } }
+// Example: Matches "valuevalue", "valuevaluevaluevalue".
+
+
+
+// Match "val" or "value"
+{ field: { $regex: /val(?:ue)?/ } }
+// Example: Matches "val" or "value".
+
+// Match "colour" or "color"
+{ field: { $regex: /colou?r/ } }
+// Example: Matches "color" or "colour".
+
+// Match strings that are exactly "value"
+{ field: { $regex: /^value$/ } }
+// Example: Matches only "value".
+
+
+// Match strings containing "value" anywhere
+{ field: { $regex: /value/ } }
+// Example: Matches "This value is great".
+
+
+// Match "value1" or "value2"
+{ field: { $regex: /value1|value2/ } }
+// Example: Matches "value1" or "value2".
+
+// Match a sequence of numbers
+{ field: { $regex: /(123)+/ } }
+// Example: Matches "123", "123123".
+
+
+// Match string containing "$"
+{ field: { $regex: /\$/ } }
+// Example: Matches "$100".
+
+// Match string containing "."
+{ field: { $regex: /\./ } }
+// Example: Matches "www.example.com".
+
+// Match US phone numbers
+{ field: { $regex: /^\(\d{3}\) \d{3}-\d{4}$/ } }
+// Example: Matches "(123) 456-7890".
+
+// Match international phone numbers
+{ field: { $regex: /^\+\d{1,3} \d{1,4}-\d{4}-\d{4}$/ } }
+// Example: Matches "+1 800-123-4567".
+
+
+// Match valid email addresses
+{ field: { $regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ } }
+// Example: Matches "test@example.com".
+
+// Match valid URLs
+{ field: { $regex: /^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$/ } }
+// Example: Matches "https://example.com".
+
+// Match dates in YYYY-MM-DD format
+{ field: { $regex: /^\d{4}-\d{2}-\d{2}$/ } }
+// Example: Matches "2023-11-20".
+
+// Match dates in MM/DD/YYYY format
+{ field: { $regex: /^\d{2}\/\d{2}\/\d{4}$/ } }
+// Example: Matches "11/20/2023".
+
+// Match ".jpg" files
+{ field: { $regex: /\.jpg$/ } }
+// Example: Matches "image.jpg".
+
+// Match ".jpg" or ".png" files
+{ field: { $regex: /\.(jpg|png)$/ } }
+// Example: Matches "photo.jpg", "image.png".
+
+
+// Match strings containing only whitespace
+{ field: { $regex: /^\s+$/ } }
+// Example: Matches "   ".
+

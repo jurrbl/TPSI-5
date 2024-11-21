@@ -1,0 +1,18 @@
+{
+  "name": "verifica-mongo-2023",
+  "version": "1.0.0",
+  "description": "Verifica 2023",
+  "main": "server.ts",
+  "scripts": {
+    "start": "tsx watch server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mime": "^4.0.4",
+    "mongodb": "^6.9.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}

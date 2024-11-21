@@ -1,0 +1,136 @@
+1. Simple $and
+Matches documents satisfying all conditions.
+
+// Pattern
+{ $and: [{ condition1 }, { condition2 }, { condition3 }] }
+
+// Example
+{ $and: [{ age: { $gt: 20 } }, { status: "active" }] }
+// Matches documents where `age > 20` and `status = "active"`.
+
+..................................................................
+
+ Simple $or
+Matches documents satisfying at least one condition.
+
+javascript
+Copia codice
+// Pattern
+{ $or: [{ condition1 }, { condition2 }, { condition3 }] }
+
+// Example
+{ $or: [{ age: { $gt: 30 } }, { status: "inactive" }] }
+// Matches documents where `age > 30` or `status = "inactive"`.
+
+..................................................................
+
+Combining $and and $or
+
+{
+  $and: [
+    { $or: [{ condition1 }, { condition2 }] },
+    { condition3 }
+  ]
+}
+
+// Example
+{
+  $and: [
+    { $or: [{ age: { $gt: 30 } }, { status: "active" }] },
+    { role: "admin" }
+  ]
+}
+// Matches documents where (`age > 30` OR `status = "active"`) AND `role = "admin"`.
+
+..................................................................
+
+
+4. Nested $or with $and
+Multiple nested $or and $and combinations.
+
+javascript
+Copia codice
+// Pattern
+{
+  $or: [
+    { $and: [{ condition1 }, { condition2 }] },
+    { $and: [{ condition3 }, { condition4 }] }
+  ]
+}
+
+// Example
+{
+  $or: [
+    { $and: [{ age: { $gt: 30 } }, { status: "active" }] },
+    { $and: [{ role: "user" }, { location: "NY" }] }
+  ]
+}
+// Matches documents where:
+// (`age > 30` AND `status = "active"`) OR (`role = "user"` AND `location = "NY"`).
+
+
+
+..................................................................
+
+ Using $elemMatch
+Filters an array to match elements that satisfy multiple conditions.
+
+javascript
+Copia codice
+// Pattern
+{ arrayField: { $elemMatch: { condition1, condition2 } } }
+
+// Example
+{
+  scores: { $elemMatch: { subject: "math", grade: { $gte: 90 } } }
+}
+// Matches documents where the `scores` array contains an element with:
+// `subject = "math"` AND `grade >= 90`.
+
+
+..................................................................
+
+
+
+
+Using $nor
+Matches documents where none of the conditions are true.
+
+javascript
+Copia codice
+// Pattern
+{ $nor: [{ condition1 }, { condition2 }] }
+
+// Example
+{
+  $nor: [{ age: { $lt: 20 } }, { status: "inactive" }]
+}
+// Matches documents where:
+// `age >= 20` AND `status != "inactive"`
+
+
+
+------------------------------------------------------------------------
+
+Combining $exists, $and, $or
+Filters documents based on field existence and conditions.
+
+javascript
+Copia codice
+// Pattern
+{
+  $and: [
+    { field1: { $exists: true } },
+    { $or: [{ condition1 }, { condition2 }] }
+  ]
+}
+
+// Example
+{
+  $and: [
+    { email: { $exists: true } },
+    { $or: [{ age: { $gte: 18 } }, { verified: true }] }
+  ]
+}
+// Matches documents where:
+// `email` exists AND (`age >= 18` OR `verified = true`).
