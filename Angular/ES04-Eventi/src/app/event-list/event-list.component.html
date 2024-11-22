@@ -1,0 +1,19 @@
+<div class="hero">
+  <p class="title">Lista di Eventi</p>
+  <div>
+    <input type="text" [(ngModel)]="newEventName" placeholder="Nome evento" required/>
+    <input type="number" [(ngModel)]="newEventAttendees" placeholder="Numero iscritti" />
+    <button (click)="addEvent()">Aggiungi evento</button>
+  </div>
+
+
+
+  <div *ngFor="let event of events" class="event-item">
+    <h3>{{ event.name }}</h3>
+    <p>Numero di iscritti: {{ event.attendees }}</p>
+    <button (click)="addAttendee(event)">Aggiungi 1</button>
+    <button (click)="resetEvents(event)">Reset</button>
+    <button (click)="removeEvent(event)">Rimuovi</button>
+  </div>
+</div>
+
