@@ -1,9 +1,9 @@
 <div class="hero">
   <p class="title">Lista di Eventi</p>
-  <div>
-    <input type="text" [(ngModel)]="newEventName" placeholder="Nome evento" required/>
-    <input type="number" [(ngModel)]="newEventAttendees" placeholder="Numero iscritti" />
-    <button (click)="addEvent()">Aggiungi evento</button>
+  <div class="add-event-form"></div>
+    <input type="text" [(ngModel)]="newEventName" placeholder="Nome evento" required class="input-field"/>
+    <input type="number" [(ngModel)]="newEventAttendees" placeholder="Numero iscritti" class="input-field"/>
+    <button (click)="addEvent()" class="add-event-button">Aggiungi evento</button>
   </div>
 
 
@@ -15,5 +15,5 @@
     <button (click)="resetEvents(event)">Reset</button>
     <button (click)="removeEvent(event)">Rimuovi</button>
   </div>
-</div>
+
 
