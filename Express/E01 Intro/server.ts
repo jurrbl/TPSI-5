@@ -91,3 +91,75 @@ app.get("/api/risorsa1", async function (req: Request, res: Response, next : Nex
       });
     }
   });
+
+  app.patch("/api/risorsa2", async function (req: Request, res: Response, next : NextFunction) {
+  
+    const unicornName = req.query.nome;
+    const nVampiri = req.query.nVampiri;
+  
+    if(!unicornName) {
+      let msg = "Missing parameter 'nome'";
+      res.status(400).send(msg);
+    }
+    else
+    {
+      const client = new MongoClient(connectionString);
+      await client.connect();
+      const collection = client.db(db_name).collection("Unicorns");
+
+      const filter = {name : unicornName};
+      const action = {$inc : {vampires : 3}};
+
+
+      const request = collection.updateOne(filter, action);
+        request.catch(err => {
+          res.status(500).send("Errore esecuzione query: " + err);
+        });
+        request.then(data => {
+          res.send(data);
+        });
+  
+        request.finally(() => {
+          client.close();
+        });
+      }
+    });
+  
+app.get('/api/risorsa3/:gender/:hair?', async function (req: Request, res: Response, next: NextFunction)
+{
+  const gender = req.params.gender;
+  const hair = req.params.hair;
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(db_name).collection("Unicorns");
+  const request = collection.find({
+    gender : gender,
+    hair : hair
+  }).toArray();
+  request.catch(err => {
+    res.status(500).send("Errore esecuzione query: " + err);
+  });
+  request.then(data => {
+    res.send(data);
+  });
+  request.finally(() => {
+    client.close();
+  });
+})
+
+
+/* ********************** Default Route ********************** */
+
+app.use('/', (req : Request, res : Response, next : NextFunction) => {
+  res.status(404).send(paginaErrore);
+  if(!req.originalUrl.startsWith('/api/')) {
+    res.send(paginaErrore);
+  } else {
+    res.send(`Resource not found' : ${req.originalUrl}`);
+  }
+});
+
+app.use(( err: any, req : Request, res : Response, next : NextFunction) => {
+  console.log(err.stack)
+  res.status(500).send(err.message);
+});

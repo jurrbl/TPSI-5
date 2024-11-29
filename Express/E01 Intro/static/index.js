@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     $("#btnParams").on("click", async function() {
 		// Richiedi gli unicorni di genere maschile e pelo grigio
-        let data = await inviaRichiesta("GET", "/api/richiestaParams/m/brown"); //passaggio di parametri NON in URL Encoded
+        let data = await inviaRichiesta("GET", "/api/risorsa3/m/brown"); //passaggio di parametri NON in URL Encoded
         if(data) {
            div.empty()
 		   for(let item of data) 
