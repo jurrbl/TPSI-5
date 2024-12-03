@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 /* *********************** Mongo Settings *********************** */
 dotenv.config({path : '.env'});
 const db_name = process.env.db_name;
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING_COMPASS!;
 
@@ -83,13 +83,16 @@ app.get("/api/getCollections", async (req: Request, res: Response, next : NextFu
 
 
 app.get("/api/:collection", async function (req: Request, res: Response, next : NextFunction) {
-  
-  const collectionName = req.params.collection;
+
+
+    const filter= req.query;
+
+    const collectionName = req.params.collection;
 
     const client = new MongoClient(connectionString);
     await client.connect();
     const collection = client.db(db_name).collection(collectionName);
-    const request = collection.find({}).toArray();
+    const request = collection.find(filter).toArray();
       request.catch(err => {
         res.status(500).send("Errore esecuzione query: " + err);
       });
@@ -101,42 +104,58 @@ app.get("/api/:collection", async function (req: Request, res: Response, next : 
         client.close();
       });
     }
-  );  
+  );
 
 
-  app.patch("/api/risorsa2", async function (req: Request, res: Response, next : NextFunction) {
+  app.patch("/api/:collection/:id", async function (req: Request, res: Response, next : NextFunction) {
   
-    const unicornName = req.query.nome;
-    const nVampiri = req.query.nVampiri;
-  
-    if(!unicornName) {
-      let msg = "Missing parameter 'nome'";
+    let id = req.params.id;
+    let objectId = new ObjectId(id);
+    if(!id) {
+      let msg = "Missing parameter 'id'";
       res.status(400).send(msg);
     }
     else
     {
       const client = new MongoClient(connectionString);
       await client.connect();
-      const collection = client.db(db_name).collection("Unicorns");
+      const collection = client.db(db_name).collection(req.params.collection);
 
-      const filter = {name : unicornName};
-      const action = {$inc : {vampires : 3}};
+      const filter = { _id: objectId };
+      const action = { $set: req.body };
 
-
-      const request = collection.updateOne(filter, action);
-        request.catch(err => {
-          res.status(500).send("Errore esecuzione query: " + err);
-        });
-        request.then(data => {
+      collection.updateOne(filter, action)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send("Errore esecuzione query: " + err);
+      })
+      .finally(() => {
+        client.close();
+      });
+    }
+  });
+    app.get("/api/:collection/:id", async (req: any, res: any, next: any) => {
+      let collectionName = req.params.collection;
+      let id = req.params.id;
+      const client = new MongoClient(connectionString);
+      await client.connect();
+      let collection = client.db(db_name).collection(collectionName);
+  
+      let _id = new ObjectId(id);
+  
+      collection.findOne({_id})
+      .catch(err => {
+          res.status(500).send("Error in query execution: " + err);
+      })
+      .then(data => {
           res.send(data);
-        });
-  
-        request.finally(() => {
+      })
+      .finally(() => {
           client.close();
-        });
-      }
-    });
-  
+      });
+  });
 app.get('/api/risorsa3/:gender/:hair?', async function (req: Request, res: Response, next: NextFunction)
 {
   const gender = req.params.gender;
