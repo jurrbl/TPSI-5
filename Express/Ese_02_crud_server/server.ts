@@ -156,7 +156,7 @@ app.get("/api/:collection", async function (req: Request, res: Response, next : 
           client.close();
       });
   });
-app.get('/api/risorsa3/:gender/:hair?', async function (req: Request, res: Response, next: NextFunction)
+  app.get('/api/:collection/:id', async function (req: Request, res: Response, next: NextFunction)
 {
   const gender = req.params.gender;
   const hair = req.params.hair;
@@ -177,6 +177,10 @@ app.get('/api/risorsa3/:gender/:hair?', async function (req: Request, res: Respo
     client.close();
   });
 })
+
+
+
+
 
 
 /* ********************** Default Route ********************** */
