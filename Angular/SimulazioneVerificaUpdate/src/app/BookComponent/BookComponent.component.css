@@ -1,0 +1,9 @@
+/* Stile per le singole celle (se necessario specifico per BookComponent) */
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+    transition: color 0.2s ease-in-out;
+  }

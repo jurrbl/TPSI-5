@@ -1,0 +1,56 @@
+<nav>
+  <img src="../../assets/logo.png" id="logo">
+  <p id="navbar-paragraph">Welcome Teacher</p>
+</nav>
+
+<div>
+  <img src="../../assets/sphere.png" alt="" id="sphere">
+  <div class="center-name-div">
+    <p>Belba Jurgen app is running!</p>
+  </div>
+</div>
+
+<div class="filters">
+  <h1>Books List</h1>
+  
+  <label>
+    <input type="checkbox" [(ngModel)]="showPageNumbers" />
+    Show Pages
+  </label>
+  <br>
+
+  <!-- Combo per filtrare i libri per nazione -->
+  <label for="countryFilter">Filter by Country: </label>
+  <select id="countryFilter" [(ngModel)]="selectedCountry">
+    <option value="">All</option>
+    <option *ngFor="let book of bookList" [value]="book.country">{{ book.country }}</option>
+  </select>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Country</th>
+      <th>Year</th>
+      <th *ngIf="showPageNumbers">Pages</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Applica il filtro ai libri -->
+    <tr *ngFor="let book of filteredBooks; let i = index"
+        [ngStyle]="{'background-color': book.country === 'Italy' ? 'cyan' : 'white'}">
+      <td>{{ book.author }}</td>
+      <!-- Aggiunto click per rimuovere il libro -->
+      <td (click)="removeBook(i)" style="cursor: pointer;">
+        {{ book.title }}
+      </td>
+      <td>{{ book.country }}</td>
+      <td [ngClass]="{'italic-underline': book.year < 1800}">{{ book.year }}</td>
+      <td *ngIf="showPageNumbers" (click)="showPages(book)" style="cursor: pointer;">
+        {{ book.pages }}
+      </td>
+    </tr>
+  </tbody>
+</table>
