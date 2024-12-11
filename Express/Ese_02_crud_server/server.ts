@@ -221,6 +221,48 @@ app.delete('/api/:collection/:id', async (req: Request, res: Response, next: Nex
 })
 
 
+app.patch("/api/:collection/:id", async function (req: Request, res: Response, next: NextFunction) {
+  let id = req.params.id; // ID del record
+  let objectId = new ObjectId(id); // Converti l'ID in ObjectId di MongoDB
+  
+  if (!id) {
+    let msg = "Missing parameter 'id'";
+    res.status(400).send(msg);
+  } else {
+    const client = new MongoClient(connectionString); // Connessione al client MongoDB
+    
+    try {
+      await client.connect(); // Connessione al DB
+      const collection = client.db(db_name).collection(req.params.collection); // Collezione selezionata
+
+      const filter = { _id: objectId }; // Filtro per identificare il record
+
+      // Rimuovi il campo '_id' dal body per evitare l'errore
+      const updatedFields = { ...req.body };
+      delete updatedFields._id;
+
+      const action = { $set: updatedFields }; // Aggiorna i campi senza '_id'
+
+      // Esegui l'aggiornamento
+      const result = await collection.updateOne(filter, action);
+
+      // Risposta al client
+      if (result.matchedCount === 0) {
+        res.status(404).send("Nessun record trovato con l'ID specificato.");
+      } else {
+        res.send({ message: "Record aggiornato con successo", result });
+      }
+    } catch (err) {
+      console.error("Errore durante l'aggiornamento:", err);
+      res.status(500).send("Errore durante l'aggiornamento: " + err.message);
+    } finally {
+      client.close(); // Chiudi la connessione
+    }
+  }
+});
+
+
+
 
 /* ********************** Default Route ********************** */
 
