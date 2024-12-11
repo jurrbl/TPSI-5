@@ -1,0 +1,54 @@
+<header>
+  <h1>Prima Verifica Angular</h1>
+</header>
+
+<div class="filters">
+  <h1>Clothing List</h1>
+  <!-- Select per filtrare le categorie -->
+  <select name="" id="" [(ngModel)]="selectedCategory">
+    <option value="">All</option>
+    <option *ngFor="let category of getUniqueCategories()">
+      {{ category }}
+    </option>
+  </select>
+</div>
+
+<!-- Tabella che mostra solo gli elementi filtrati -->
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Categoria</th>
+      <th>Taglia</th>
+      <th>Prezzo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of getFilteredClothingList();">
+      <td (click)="showDisplay(item)" [ngStyle]="{'cursor': 'pointer'}">{{ item.Nome }}</td>
+      <td>{{ item.Categoria }}</td>
+      <td>{{ item.Taglia }}</td>
+      <td>{{ item.Prezzo }}</td>
+    </tr>
+    
+    <tr>
+      @if(getFilteredClothingList().length == 0)
+      {
+        <td colspan="4">Non ci sono vestiti disponibili al momento</td>
+      }
+      
+    </tr>
+  </tbody>
+</table>
+
+<div class="details" *ngIf="selectedItem">
+  <div>
+    <h2>Dettagli Vestito</h2>
+    <img src="{{ selectedItem.Immagine }}" alt="">
+    <p><strong>Nome:</strong> {{ selectedItem.Nome }}</p>
+    <p><strong>Categoria:</strong> {{ selectedItem.Categoria }}</p>
+    <p><strong>Taglia:</strong> {{ selectedItem.Taglia }}</p>
+    <p><strong>Prezzo:</strong> {{ selectedItem.Prezzo }}</p>
+    <p><strong>Descrizione:</strong> {{ selectedItem.Descrizione }}</p>
+  </div>
+</div>

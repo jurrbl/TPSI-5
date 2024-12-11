@@ -1,0 +1,72 @@
+html{
+   scroll-behavior: smooth;
+}
+
+/* Header Stili */
+
+header{
+    display: flex;
+    background-color: antiquewhite;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    color: darkblue;
+    font-size: 2rem;
+    font-family: 'Courier New';
+    text-decoration: underline;
+}
+
+/* Tabella Stili */
+
+table{
+    margin: 50px auto;
+    border-collapse: collapse;
+    width: 90%;
+    border: 1px solid black;
+    text-align: center;
+    
+}
+
+table th{
+    border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+table tr{
+    border: 1px solid black;
+}
+
+table td{
+    border: 1px solid black;
+}
+
+/* Filters */
+
+.filters
+{
+    margin-left: 40px;
+    margin-top: 100px;
+}
+
+/* Dettagli stile */
+
+.details {
+   
+    width:70%;
+    height:400px;
+    margin: 0px auto;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.details img{
+    width: 150px;
+    height: 100px;
+  
+    
+}
