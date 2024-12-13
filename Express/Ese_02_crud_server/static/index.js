@@ -1,6 +1,6 @@
-"use strict" 
+"use strict"
 let currentCollection = "";
-
+let divCard;
 $(document).ready(function () {
 	let divIntestazione = $("#divIntestazione")
 	let divFilters = $(".card").eq(0)
@@ -11,6 +11,8 @@ $(document).ready(function () {
 	let btnAdd = $("#btnAdd").prop("disabled", true);
 	currentCollection = "";
 	let lstHair = $("#lstHair")
+	 divCard = $(".mt-3")
+	divCard.hide();
 
 
 	divFilters.hide()
@@ -47,67 +49,68 @@ $(document).ready(function () {
 	}
 
 	async function updateRecord(id) {
-        try {
-          
-            let data = await inviaRichiesta("GET", `/api/${currentCollection}/${id}`);
-            divUpdate.empty()
-    
-            if (data) {
-                let updatedData = { ...data };
-                delete updatedData._id; //Andava tolto l'id perchè mi dava errore 
-                //MongoServerError: Performing an update on the path '_id' would modify the immutable field '_id'
-    
-                $("<h4>").appendTo(divUpdate).text("Modifica i campi:");
-                for (const key of Object.keys(data)) {
-                    if (key !== "_id") { // Escludi _id
-                        let container = $("<div>").appendTo(divUpdate).addClass("form-group");
-    
-                   
-                        $("<label>").appendTo(container).text(key + ":");
-    
-                       
-                        let input = $("<input>")
-                            .appendTo(container)
-                            .addClass("form-control")
-                            .val(data[key]);
-    
-                      
-                        input.on("input", function () {
-                            updatedData[key] = $(this).val();
-                        });
-                    }
-                }
-    
-               
-                $("<button>")
-                    .appendTo(divUpdate)
-                    .text("Salva")
-                    .addClass("btn btn-success btn-sm mt-2")
-                    .on("click", async function () {
-                        try {
-                            
-                            let response = await inviaRichiesta("PATCH", `/api/${currentCollection}/${id}`, updatedData);
-                            if (response) {
-                                alert("Record aggiornato correttamente");
-                                console.log(response);
-                                getDataCollection();
-                            }
-                        } catch (error) {
-                            alert("Errore durante l'aggiornamento del record.");
-                            console.error(error);
-                        }
-                    });
-            }
-        } catch (error) {
-            alert("Errore nel recupero del record.");
-            console.error(error);
-        }
-    }
-    
+		divCard.show()
+		try {
+
+			let data = await inviaRichiesta("GET", `/api/${currentCollection}/${id}`);
+			divUpdate.empty()
+
+			if (data) {
+				let updatedData = { ...data };
+				delete updatedData._id; //Andava tolto l'id perchè mi dava errore 
+				//MongoServerError: Performing an update on the path '_id' would modify the immutable field '_id'
+
+				$("<h4>").appendTo(divUpdate).text("Modifica i campi:");
+				for (const key of Object.keys(data)) {
+					if (key !== "_id") { // Escludi _id
+						let container = $("<div>").appendTo(divUpdate).addClass("form-group");
+
+
+						$("<label>").appendTo(container).text(key + ":");
+
+
+						let input = $("<input>")
+							.appendTo(container)
+							.addClass("form-control")
+							.val(data[key]);
+
+
+						input.on("input", function () {
+							updatedData[key] = $(this).val();
+						});
+					}
+				}
+
+
+				$("<button>")
+					.appendTo(divUpdate)
+					.text("Salva")
+					.addClass("btn btn-success btn-sm mt-2")
+					.on("click", async function () {
+						try {
+
+							let response = await inviaRichiesta("PATCH", `/api/${currentCollection}/${id}`, updatedData);
+							if (response) {
+								alert("Record aggiornato correttamente");
+								console.log(response);
+								getDataCollection();
+							}
+						} catch (error) {
+							alert("Errore durante l'aggiornamento del record.");
+							console.error(error);
+						}
+					});
+			}
+		} catch (error) {
+			alert("Errore nel recupero del record.");
+			console.error(error);
+		}
+	}
+
 
 	async function getDataCollection(filter = {}) {
 		divDettagli.empty()
-        divUpdate.empty()
+		divUpdate.empty()
 		const data = await inviaRichiesta("GET", `/api/${currentCollection}`, filter)
 		if (data) {
 			console.log(data)
@@ -122,13 +125,15 @@ $(document).ready(function () {
 				})
 				let key = Object.keys(element)[1]
 				$("<td>").appendTo(tr).text(element[key]).on("click", function () {
-					showDetails(element["_id"])
+					showDetails(element["_id"], 'GET')
 				})
 				let td = $("<td>").appendTo(tr)
 				$("<div>").appendTo(td).on("click", function () {
 					updateRecord(element["_id"])
 				})
-				$("<div>").appendTo(td)
+				$("<div>").appendTo(td).on("click", function () {
+					putRecord(element["_id"]);
+				})
 				$("<div>").appendTo(td).on("click", function () {
 					deleteRecord(element["_id"]);
 				})
@@ -179,17 +184,23 @@ $(document).ready(function () {
 			}
 		})
 	})
-	async function showDetails(id) {
+	async function showDetails(id, method = 'GET') {
 		let data = await inviaRichiesta("GET", `/api/${currentCollection}/${id}`)
 		if (data) {
 			console.log(data)
 			divDettagli.empty()
-			for (const key in data) {
-				$("<strong>").appendTo(divDettagli).text(`${key}:`)
-				$("<span>").appendTo(divDettagli).text(`${
-					JSON.stringify(data[key])
-				}`)
-				$("<br>").appendTo(divDettagli)
+			if(method == 'GET')
+			{
+				for (const key in data) {
+					$("<strong>").appendTo(divDettagli).text(`${key}:   `)
+					$("<span>").appendTo(divDettagli).text(`${JSON.stringify(data[key])
+						}`)
+					$("<br>").appendTo(divDettagli)
+				}
+			}
+			else
+			{
+
 			}
 		}
 	}

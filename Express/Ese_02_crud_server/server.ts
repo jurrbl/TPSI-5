@@ -229,24 +229,24 @@ app.patch("/api/:collection/:id", async function (req: Request, res: Response, n
     let msg = "Missing parameter 'id'";
     res.status(400).send(msg);
   } else {
-    const client = new MongoClient(connectionString); // Connessione al client MongoDB
+    const client = new MongoClient(connectionString);
     
     try {
-      await client.connect(); // Connessione al DB
-      const collection = client.db(db_name).collection(req.params.collection); // Collezione selezionata
+      await client.connect();
+      const collection = client.db(db_name).collection(req.params.collection); 
 
-      const filter = { _id: objectId }; // Filtro per identificare il record
+      const filter = { _id: objectId }; 
 
-      // Rimuovi il campo '_id' dal body per evitare l'errore
+      // tolgo il campo '_id' dal body per evitare l'errore
       const updatedFields = { ...req.body };
       delete updatedFields._id;
 
-      const action = { $set: updatedFields }; // Aggiorna i campi senza '_id'
+      const action = { $set: updatedFields };
 
-      // Esegui l'aggiornamento
+     
       const result = await collection.updateOne(filter, action);
 
-      // Risposta al client
+
       if (result.matchedCount === 0) {
         res.status(404).send("Nessun record trovato con l'ID specificato.");
       } else {
