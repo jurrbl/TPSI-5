@@ -1,0 +1,64 @@
+esegui le seguenti query : Visualizzare gli studenti di 5 che hanno fatto più di 10 assenze. Visualizzare nome, classe e n. di assenze 
+  { nome: 'Flaminia', classe: '5A', assenze: 23 }, 
+  { nome: 'Eraldo', classe: '5A', assenze: 12 }, 
+  { nome: 'Leonardo', classe: '5B', assenze: 21 }, 
+  { nome: 'Marta', classe: '5B', assenze: 12 } 
+ 2) Visualizzare i 3 studenti che complessivamente hanno fatto più assenze, in ordine decrescente di numero di 
+assenza. Visualizzare nome, classe e numero di assenze   { nome: 'Costanza', classe: '3B', assenze: 26 }, 
+  { nome: 'Flaminia', classe: '5A', assenze: 23 }, 
+  { nome: 'Rolando', classe: '4B', assenze: 21 } 
+ 3) Visualizzare i voti di informatica degli studenti della 5B.  Visualizzare nome dello studente e valutazione   
+[{ 
+    "nome": "Gustavo", 
+    "valutazioni": [{"voto": 6 }] 
+  }, 
+// 6 record 
+ 
+ 4) Visualizzare tutti gli studenti di 5° che hanno preso in informatica un voto >= 9 
+Visualizzare nome dello studente, classe di appartenenza ed il voto  
+[{  "nome": "Alfio", 
+    "classe": "5A", 
+    "valutazioni": [{"voto": 9 }] 
+  }, 
+  { "nome": "Beatrice", 
+    "classe": "5A", 
+    "valutazioni": [{"voto": 9 }] 
+  }, 
+  { "nome": "Marta", 
+    "classe": "5B", 
+    "valutazioni": [{"voto": 10 }] 
+  }] 
+ 5) aggiungere un voto = 7 nella disciplina informatica alla data odierna (semplicemente new Date()) per lo 
+studente Alfio della classe 5A. [Questo voto in realtà non verrà poi visualizzato da nessuna parte] in questo modo 
+async function query5() {
+	const client = new MongoClient(connectionString);
+	await client.connect().catch(() => console.log('Errore connessione al db'));
+	const collection = client.db(DB_NAME).collection('Piloti');
+
+	try {
+		const filter = { 'piloti.nazione': 'Regno Unito', 'piloti.punti': { $gt: 10 } };
+		const projection = { 'piloti.nome': 1, scuderia: 1, 'piloti.punti': 1, _id: 0 };
+		const request = collection.find(filter).project(projection).sort({ 'piloti.punti': -1 }).toArray();
+		request.catch((err) => console.log(`Errore: ${err.message}`));
+		request.then((data) => console.log(`Query5: ${JSON.stringify(data, null, 3)}`));
+		request.finally(() => client.close());
+	} catch (err) {
+		console.log(`Errore: ${err.message}`);
+	}
+}
+
+ovvero secondo una funzione async basandoti su questo json strutturato così 
+[{
+    "nome": "Alfio",
+	"genere": "m",
+	"classe": "5A",
+	"assenze":3,
+	"dob": { "$date": "2006-01-13T00:00:00Z"},
+	"valutazioni" :[
+	  {"data": { "$date": "2024-11-21T00:00:00Z"}, "disciplina":"italiano", "voto":5 },
+	  {"data": { "$date": "2024-11-21T00:00:00Z"}, "disciplina":"matematica", "voto":9 },
+	  {"data": { "$date": "2024-11-21T00:00:00Z"}, "disciplina":"informatica", "voto":9 },
+	  {"data": { "$date": "2024-11-21T00:00:00Z"}, "disciplina":"sistemi", "voto":8 }
+	]
+},
+

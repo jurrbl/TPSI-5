@@ -2,22 +2,18 @@
 
 import http from 'http';
 import fs from 'fs';
-import express from 'express';
-import { Request, Response, NextFunction } from 'express';
-
-/* *********************** Dot ENV *********************** */
-
-import dotenv from 'dotenv';
-
-/* *********************** Mongo Settings *********************** */
-dotenv.config({ path: '.env' });
-const db_name = process.env.db_name;
+import express, { NextFunction, Request, Response } from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-const connectionString = process.env.MONGODB_CONNECTION_STRING_COMPASS!;
+/* ********************** Mongo config ********************** */
+dotenv.config({ path: '.env' });
+const dbName = process.env.dbName;
+const connectionString = process.env.MONGODB_CONNECTION_STRING_ATLAS!;
 
 /* ********************** HTTP server ********************** */
-const port = 3000;
+const port = process.env.PORT;
 let paginaErrore: string;
 const app = express();
 const server = http.createServer(app);
@@ -30,252 +26,212 @@ function init() {
     if (!err) {
       paginaErrore = data.toString();
     } else {
-      paginaErrore = '<h1>Risorsa non trovata</h1>';
+      paginaErrore = '<h1>Resource not found</h1>';
     }
   });
 }
 /* ********************** Middleware ********************** */
 // 1. Request log
-app.use('/', (req: any, res: any, next: any) => {
+app.use('/', (req: Request, res: Response, next: NextFunction) => {
   console.log(req.method + ': ' + req.originalUrl);
   next();
 });
 
 // 2. Static resources
-app.use('/', express.static('./static'));  //cerca le risorse statiche se la trova la restituisce
-// se non la trova invece esegue next() ovvero continua nelle scansione della route
+app.use('/', express.static('./static'));
 
-// 3. Body params questo permette di gestire il body delle richieste HTTP aggancia i parametri del body
-app.use('/', express.json({ limit: '50mb' }));
-app.use('/', express.urlencoded({ limit: '50mb', extended: true }));
-//qua non si fa next() perchè lo fa in automatico 
-
+// 3. Body params
+app.use('/', express.json({ limit: '50mb' })); // Parsifica i parametri in formato json
+app.use('/', express.urlencoded({ limit: '50mb', extended: true })); // Parsifica i parametri urlencoded
 
 // 4. Params log
 app.use('/', (req, res, next) => {
   if (Object.keys(req.query).length > 0) {
-    console.log('--> Parametri GET: ' + JSON.stringify(req.query));
+    console.log('--> GET params: ' + JSON.stringify(req.query));
   }
   if (Object.keys(req.body).length > 0) {
-    console.log('--> Parametri BODY: ' + JSON.stringify(req.body));
+    console.log('--> BODY params: ' + JSON.stringify(req.body));
   }
   next();
 });
 
+// 5. CORS
+const whitelist = [
+  'http://my-crud-server.herokuapp.com', // porta 80 (default)
+  'https://my-crud-server.herokuapp.com', // porta 443 (default)
+  'http://localhost:3000',
+  'https://localhost:3001',
+  'http://localhost:4200', // server angular
+  'https://cordovaapp' // porta 443 (default)
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin)
+      // browser direct call
+      return callback(null, true);
+    if (whitelist.indexOf(origin) === -1) {
+      var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    } else return callback(null, true);
+  },
+  credentials: true
+};
+app.use('/', cors(corsOptions));
 /* ********************** Client routes ********************** */
-
-
-app.get("/api/getCollections", async (req: Request, res: Response, next: NextFunction) => {
+app.get('/api/collections', async (req: Request, res: Response) => {
   const client = new MongoClient(connectionString);
   await client.connect();
-  const db = client.db(db_name);
+  const db = client.db(dbName);
+
   const request = db.listCollections().toArray();
-
   request.then((data) => {
     res.send(data);
-  }).catch((err) => {
-    res.status(500).send("Collection access error: " + err);
-  }).finally(() => {
-    client.close();
   });
-});
-
-
-
-app.get("/api/:collection", async function (req: Request, res: Response, next: NextFunction) {
-
-
-  const filter = req.query;
-
-  const collectionName = req.params.collection;
-
-  const client = new MongoClient(connectionString);
-  await client.connect();
-  const collection = client.db(db_name).collection(collectionName);
-  const request = collection.find(filter).toArray();
-  request.catch(err => {
-    res.status(500).send("Errore esecuzione query: " + err);
-  });
-  request.then(data => {
-    res.send(data);
-  });
-
-  request.finally(() => {
-    client.close();
-  });
-}
-);
-
-
-app.patch("/api/:collection/:id", async function (req: Request, res: Response, next: NextFunction) {
-
-  let id = req.params.id;
-  let objectId = new ObjectId(id);
-  if (!id) {
-    let msg = "Missing parameter 'id'";
-    res.status(400).send(msg);
-  }
-  else {
-    const client = new MongoClient(connectionString);
-    await client.connect();
-    const collection = client.db(db_name).collection(req.params.collection);
-
-    const filter = { _id: objectId };
-    const action = { $set: req.body };
-
-    collection.updateOne(filter, action)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send("Errore esecuzione query: " + err);
-      })
-      .finally(() => {
-        client.close();
-      });
-  }
-});
-app.get("/api/:collection/:id", async (req: any, res: any, next: any) => {
-  let collectionName = req.params.collection;
-  let id = req.params.id;
-  const client = new MongoClient(connectionString);
-  await client.connect();
-  let collection = client.db(db_name).collection(collectionName);
-
-  let _id = new ObjectId(id);
-
-  collection.findOne({ _id })
-    .catch(err => {
-      res.status(500).send("Error in query execution: " + err);
-    })
-    .then(data => {
-      res.send(data);
-    })
-    .finally(() => {
-      client.close();
-    });
-});
-app.get('/api/:collection/:id', async function (req: Request, res: Response, next: NextFunction) {
-  const gender = req.params.gender;
-  const hair = req.params.hair;
-  const client = new MongoClient(connectionString);
-  await client.connect();
-  const collection = client.db(db_name).collection("Unicorns");
-  const request = collection.find({
-    gender: gender,
-    hair: hair
-  }).toArray();
-  request.catch(err => {
-    res.status(500).send("Errore esecuzione query: " + err);
-  });
-  request.then(data => {
-    res.send(data);
-  });
-  request.finally(() => {
-    client.close();
-  });
-})
-
-
-
-app.post('/api/collection/', async function (req: Request, res: Response, next: NextFunction) {
-
-  const newRecord = req.body;
-  
-  let collectionName = newRecord.collection;
-  const client = new MongoClient(collectionName)
-  await client.connect;
-  let collection = client.db(db_name).collection(collectionName);
-
-  collection.insertOne(newRecord)
-    .catch(err => {
-      res.status(500).send("Error in query execution: " + err);
-    })
-    .then(data => {
-      res.send(data);
-    })
-    .finally(() => {
-      client.close();
-    });
-}
-);
-
-app.delete('/api/:collection/:id', async (req: Request, res: Response, next: NextFunction) => {
-  
-  const collectionName = req.params.collection;
-  const id = req.params.id;
-  let oid = new ObjectId(id)
-  const client = new MongoClient(connectionString)
-  await client.connect();
-  const collection = client.db(db_name).collection(collectionName)
-  const request = collection.deleteOne({ "_id": oid });
   request.catch((err) => {
-    res.status(500).send(`Errore esecuzione query: ${err}`)
-  })
-  request.then((data) => {
-    res.send(data)
-  })
+    res.status(500).send(`Collections access error: ${err}`);
+  });
   request.finally(() => {
     client.close();
-  })
-})
-
-
-app.patch("/api/:collection/:id", async function (req: Request, res: Response, next: NextFunction) {
-  let id = req.params.id; // ID del record
-  let objectId = new ObjectId(id); // Converti l'ID in ObjectId di MongoDB
-  
-  if (!id) {
-    let msg = "Missing parameter 'id'";
-    res.status(400).send(msg);
-  } else {
-    const client = new MongoClient(connectionString);
-    
-    try {
-      await client.connect();
-      const collection = client.db(db_name).collection(req.params.collection); 
-
-      const filter = { _id: objectId }; 
-
-      // tolgo il campo '_id' dal body per evitare l'errore
-      const updatedFields = { ...req.body };
-      delete updatedFields._id;
-
-      const action = { $set: updatedFields };
-
-     
-      const result = await collection.updateOne(filter, action);
-
-
-      if (result.matchedCount === 0) {
-        res.status(404).send("Nessun record trovato con l'ID specificato.");
-      } else {
-        res.send({ message: "Record aggiornato con successo", result });
-      }
-    } catch (err) {
-      console.error("Errore durante l'aggiornamento:", err);
-      res.status(500).send("Errore durante l'aggiornamento: " + err.message);
-    } finally {
-      client.close(); // Chiudi la connessione
-    }
-  }
+  });
 });
 
+app.get('/api/:collection', async (req: Request, res: Response) => {
+  const { collection: collectionName } = req.params;
 
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
 
+  const request = collection.find({}).toArray();
+  request.catch((err) => {
+    res.status(500).send(`Errore esecuzione query: ${err}`);
+  });
+  request.then((data) => {
+    res.send(data);
+  });
+  request.finally(() => {
+    client.close();
+  });
+});
 
-/* ********************** Default Route ********************** */
+app.get('/api/:collection/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const _id: any = ObjectId.isValid(id) ? new ObjectId(id) : id;
+  const { collection: collectionName } = req.params;
 
-app.use('/', (req: Request, res: Response, next: NextFunction) => {
-  res.status(404).send(paginaErrore);
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
+
+  collection
+    .findOne({ _id })
+    .catch((err) => {
+      res.status(500).send(`Error in query execution: ${err}`);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .finally(() => {
+      client.close();
+    });
+});
+
+app.post('/api/:collection/', async (req: Request, res: Response) => {
+  const newRecord = req.body;
+
+  const collectionName = req.params.collection;
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
+
+  collection
+    .insertOne(newRecord)
+    .catch((err) => {
+      res.status(500).send('Error in query execution: ' + err);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .finally(() => {
+      client.close();
+    });
+});
+
+app.delete('/api/:collection/:id', async (req: Request, res: Response) => {
+  const { id, collection: collectionName } = req.params;
+  const _id: any = ObjectId.isValid(id) ? new ObjectId(id) : id;
+
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
+
+  collection
+    .deleteOne({ _id })
+    .catch((err) => {
+      res.status(500).send('Error in query execution: ' + err);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .finally(() => {
+      client.close();
+    });
+});
+
+app.put('/api/:collection/:id', async (req: Request, res: Response) => {
+  const { id, collection: collectionName } = req.params;
+  const _id: any = ObjectId.isValid(id) ? new ObjectId(id) : id;
+  const { action } = req.body;
+
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
+
+  collection
+    .updateOne({ _id: _id }, action)
+    .catch((err) => {
+      res.status(500).send('Error in query execution: ' + err);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .finally(() => {
+      client.close();
+    });
+});
+
+app.patch('/api/:collection/:id', async (req: Request, res: Response) => {
+  const { id, collection: collectionName } = req.params;
+  const { action } = req.body;
+  const _id: any = ObjectId.isValid(id) ? new ObjectId(id) : id;
+
+  const client = new MongoClient(connectionString);
+  await client.connect();
+  const collection = client.db(dbName).collection(collectionName);
+
+  collection
+    .updateOne({ _id }, { $set: action })
+    .catch((err) => {
+      res.status(500).send('Error in query execution: ' + err);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .finally(() => {
+      client.close();
+    });
+});
+/* ********************** Default Route & Error Handler ********************** */
+app.use('/', (req: Request, res: Response) => {
+  res.status(404);
   if (!req.originalUrl.startsWith('/api/')) {
     res.send(paginaErrore);
   } else {
-    res.send(`Resource not found' : ${req.originalUrl}`);
+    res.send(`Resource not found: ${req.originalUrl}`);
   }
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(err.stack)
+app.use((err: any, req: Request, res: Response) => {
+  console.log(err.stack);
   res.status(500).send(err.message);
 });

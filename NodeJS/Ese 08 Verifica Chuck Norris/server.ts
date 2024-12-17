@@ -107,11 +107,7 @@ dispatcher.addListener('POST', '/api/facts', function (req, res) {
 
 dispatcher.addListener('POST', '/api/rate', function (req, res) {
   
-  let ids = req['BODY'].selectedIds;
-  const idsVector: any[] = [];
-  ids.forEach(element => {
-    idsVector.push(element)
-  });
+ M
   
   console.log('Gli ID Sono : ', ids);
 
