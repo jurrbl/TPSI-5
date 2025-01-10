@@ -2,7 +2,45 @@ $(document).ready(function () {
   let txtUser = $('#txtUser');
   let txtFile = $('#txtFile');
 
+
+
+  /* Preview Immagine Selezioata */
+  
+  txtFile.on('change', function () {
+    /* Controlla che blob non sia vuoto  */
+
+    if(txtFile.val())
+    {
+      let blob = txtFile.prop('files')[0]
+      let promise = base64Convert(blob);
+  
+      promise.then(function(base64img)
+      {
+        $("#imgPreview").prop("src", base64img);
+      })
+  
+      promise.catch(function(error){
+        alert(error);
+      })
+    }
+  });
+
   getImages();
+
+
+
+  function base64Convert(blob) {
+    return new Promise(function(resolve, reject){
+    let reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onload = function (event) {
+     resolve(event.target.result); // event.target sarebbe reader
+    };
+    reader.onerror = function (error) {
+     reject(error);
+    };
+    })
+    }
 
   // aumentare il timeout a 10 sec perchè cloudinary ci mette molto a rispondere !
 
@@ -106,4 +144,4 @@ $(document).ready(function () {
       };
     });
   }
-});
+})

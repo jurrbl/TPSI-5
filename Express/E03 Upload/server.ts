@@ -11,11 +11,11 @@ import { resourceLimits } from 'worker_threads';
 
 /* ********************** Mongo config ********************** */
 dotenv.config({ path: '.env' });
-const dbName = process.env.dbName;
-const connectionString = process.env.connectionStringAtlas!;
+const db_name = process.env.db_name;
+const connectionString = process.env.MONGODB_CONNECTION_STRING_ATLAS!;
 
 /* ********************** HTTP server ********************** */
-const port = process.env.port;
+const port = process.env.PORT;
 let paginaErrore: string;
 const app = express();
 const server = http.createServer(app);
@@ -86,35 +86,59 @@ app.use('/', cors(corsOptions));
 
 app.get('/api/images', async (req: Request, res: Response) => {
   const client = new MongoClient(connectionString);
-  await client.connect();
-  const collection = client.db(dbName).collection('images');
+  try {
+    await client.connect();
+    const db = client.db(db_name);
+    const collections = await db.listCollections().toArray();
+    const collectionNames = collections.map((col) => col.name);
+    console.log('Collections disponibili:', collectionNames);
 
-  collection
-    .find()
-    .toArray()
-    .catch((err) => {
-      res.status(500).send(`Error in query execution: ${err}`);
-    })
-    .then((data) => {
-      res.send(data);
-    })
-    .finally(() => {
-      client.close();
-    });
-});
+    if (!collectionNames.includes('Users')) {
+      return res.status(404).send('La collection "Users" non esiste.');
+    }
 
-app.post('/api/uploadBinary', async (req: Request, res: Response) => {
-  const { user } = req['body'];
-  const img = req['files']?.img;
-  console.log(img);
-  if (img) {
-    fs.writeFile(`./static/img/${img['name']}`, img['data'], function () {
-      res.send({ ris: 'ok' });
-    });
-  } else {
-    res.status(400).send({ err: 'immagine mancante' });
+    const collection = db.collection('Users');
+    const data = await collection.find().toArray();
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(`Errore durante la connessione o query: ${err.message}`);
+  } finally {
+    client.close();
   }
 });
+
+
+app.post("/api/uploadBinary", async (req :any, res :any, next :any) => {
+  const {user} = req["body"];
+  const {img} = req["files"];
+
+  fs.writeFile("./static/img/" + img.name, img.data, async function(err :any){
+      if(err)
+      {
+          res.status(500).send(err.message);
+      }
+      else
+      {
+          const newUser = {
+              "username": user,
+              "img": img.name
+          };
+          const client = new MongoClient(connectionString);
+          await client.connect().catch(function(err){res.status(503).send("Error: connection to DB server didn't went throught")});
+          let collection = client.db(db_name).collection("Users")
+          collection.insertOne(newUser)
+          .then(function(data){
+              res.send(data);
+          })
+          .catch(function(err){
+              res.status(500).send("Error: wrong query execution; " + err.message);
+          })
+          .finally(function(){
+              client.close();
+          })
+      }
+    });
+})
 /* ********************** Default Route & Error Handler ********************** */
 app.use('/', (req: Request, res: Response) => {
   res.status(404);
