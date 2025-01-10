@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Google</title>
+    <link rel="icon" href="img/vallauri.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="./index.css">
+	<script src="./jquery-3.5.1.min.js"></script>
+	<script src="./libreria.js"></script>
+	<script src="./index.js"></script>
+</head>
+
+<body>
+	<!-- NAVBAR -->
+	<div>
+		<span>Chi siamo</span>
+		<span>Google Store</span>
+		<span>
+			<a id="btnRegistrati">Registrati</a>
+			<a id="btnAccedi">Accedi</a>
+			<img id="imgProfilo">
+		</span>
+	</div>
+	
+	<!-- Google -->
+	<div> <!-- logo --> </div>
+	<div>
+		<input type="text" id="txtRicerca"/>
+		<select id="lstSuggerimenti"> </select>
+		<div id="divLink">   </div>
+	</div>
+	
+	<!-- Accedi -->
+	<fieldset id="divAccedi">
+		<legend> Accedi </legend>
+		<label> username: <input type="text" value="pippo"/> </label>
+		<label> password: <input type="password" value="pippo"/> </label>
+		<br>
+		<button>OK</button>
+		<button>Annulla</button>
+	</fieldset>
+	
+	<!-- Registrati -->
+	<fieldset id="divRegistrati">
+		<legend> Registrati </legend>
+		<label> username: <input type="text"/> </label>
+		<label> password: <input type="password"/> </label>
+		<br>
+		<label> profile image:
+		   <input type="file" >
+		</label>
+		<br>
+		<button>OK</button>
+		<button>Annulla</button>
+	</fieldset>
+
+	
+</body>
+</html>

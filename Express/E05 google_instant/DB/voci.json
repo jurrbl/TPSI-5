@@ -1,0 +1,22 @@
+[
+ {"_id":"1",  "voci":["fossano", "castello", "acaja"], "nClick":365 },
+ {"_id":"2",  "voci":["fossano", "scuole", "itis", "vallauri"], "nClick":245 },
+ {"_id":"3",  "voci":["fossano", "calcio"], "nClick":127 },
+ {"_id":"4",  "voci":["fossano", "comune"], "nClick":375 },
+ {"_id":"5",  "voci":["cuneo", "scuole", "itis", "delpozzo"], "nClick":243 },
+ {"_id":"6",  "voci":["cuneo", "cronaca"], "nClick":485 },
+ {"_id":"7",  "voci":["cuneo", "eventi"], "nClick":453 },
+ {"_id":"8",  "voci":["fossano", "scuole", "liceo", "ancina"], "nClick":234 },
+ {"_id":"9",  "voci":["scuole", "superiori", "provincia", "cuneo"], "nClick":355 },
+ {"_id":"10", "voci":["scuole", "superiori", "piemonte"], "nClick":360 },
+ {"_id":"11", "voci":["scuole", "superiori", "cuneo"], "nClick":350 },
+ {"_id":"12", "voci":["scuole", "superiori", "fossano"], "nClick":235 },
+ {"_id":"13", "voci":["cuneo", "scuole", "liceo", "peano"], "nClick":232 },	 
+ {"_id":"14", "voci":["cuneo", "calcio"], "nClick":236 },
+ {"_id":"15", "voci":["calcio", "serie A"], "nClick":495 },
+ {"_id":"16", "voci":["calcio", "serie B"], "nClick":240 },
+ {"_id":"17", "voci":["calcio", "mercato"], "nClick":362 },
+ {"_id":"18", "voci":["cuneo", "monumento alla resistenza"], "nClick":370 },
+ {"_id":"19", "voci":["fossano", "monumenti", "da vedere"], "nClick":238 },
+ {"_id":"20", "voci":["cuneo", "monumenti", "da vedere"], "nClick":480 }
+]
